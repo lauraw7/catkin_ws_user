@@ -16,15 +16,11 @@ except ImportError:
 Balloon = namedtuple('Balloon', ['name', 'hue', 'position'])
 
 # estimates for balloon hues and positions
-# hue is divided by two since opencv uses hues in ranges [0, 180)					
-#balloons = (Balloon('purple', 260 / 2, (2.255, 2.425)),
-#            Balloon('red',    354 / 2, (3.515, 3.04)),
-#            Balloon('blue',   222 / 2, (4.14, 1.79)),
-#            Balloon('green',  120 / 2, (2.265, 1.165)),)
-balloons = (Balloon('purple', 260 / 2, (2.29, 2.40)),								#ANGEPASST FUER AKTUELLE ANORDNUNG
-            Balloon('red',    354 / 2, (3.55, 3.03)),
-            Balloon('blue',   222 / 2, (4.18, 1.77)),
-            Balloon('green',  120 / 2, (2.29, 1.14)),)
+# hue is divided by two since opencv uses hues in ranges [0, 180)
+balloons = (Balloon('purple', 260 / 2, (2.255, 2.425)),
+            Balloon('red',    354 / 2, (3.515, 3.04)),
+            Balloon('blue',   222 / 2, (4.14, 1.79)),
+            Balloon('green',  120 / 2, (2.265, 1.165)),)
 
 # the balloon hues as a numpy array with shape (1, 4)
 balloon_hues = np.array([[_b.hue for _b in balloons]])
@@ -181,18 +177,9 @@ class BalloonDetector(object):
 
     def calculate_angle(self):
         """ calculates the yaw angle based on the last parsed image """
-        angles = [vector_to_angle(balloon.position - self.xy) + angle 
-                  for balloon, angle in self.balloon_angles.items()]
-        return angle_mean(angles) - np.pi / 2  # mean of angle offsets for each detected balloon
-
-    def calculate_angles2balloons(self):
-	#print "calc_a2b:",self.balloon_angles.items()
-        """ calculates the yaw angle based on the last parsed image """
         angles = [vector_to_angle(balloon.position - self.xy) + angle
                   for balloon, angle in self.balloon_angles.items()]
-        colors = [balloon.name
-                  for balloon, angle in self.balloon_angles.items()]
-        return angles, colors
+        return angle_mean(angles) - np.pi / 2  # mean of angle offsets for each detected balloon
 
     def draw_markers(self, img):
         """ draw markers for the last detected positions """
